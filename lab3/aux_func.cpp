@@ -65,7 +65,7 @@ std::string getSize( unsigned long packet)
 int main(int argc, char *argv[])
 {
 //========================================================
-// -----------------------------------FIRST DEBUGGING-------------------------------------------
+// --------------FIRST DEBUGGING---------------------
 //========================================================
 	//	For debugging purposes (write to the log )
 	
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 		fprintf(pFile,"argv[%d] = %s \n", i, (argv[i]));
 	}
 //========================================================
-// ----------------------------------DECODING MESSAGE----------------------------------------
+// ------------------DECODING MESSAGE-----------------
 //========================================================
 	std::deque<unsigned char>  encrypted_bytes;// used to hold the tokens
 	char *dup = strdup(argv[1]);//	copy the string
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 		token = strtok(NULL, "x");
 	}
 //========================================================
-// ---------------------------------------PURGE RESULTS--------------------------------------------
+// ---------------------PURGE RESULTS---------------
 //========================================================
 //	Example how to release information from a deque
 //	getColor and getSize  decodes the message back into human
@@ -103,12 +103,12 @@ int main(int argc, char *argv[])
 	}	
 	fclose(pFile);
 //========================================================
-// ------------------------------SEND INFORMATION--------------------------------------------
+// ------------------SEND INFORMATION--------------------
 //========================================================
 // 	Use this area to send informtion to FPGA through SPI
 
 //========================================================
-// -----------------------GPIO MASTER BUS RELEASE---------------------------------------
+// -------------GPIO MASTER BUS RELEASE--------------
 //========================================================
 //	Use this area to signal the FPGA that you are finished controlling
 //	The SPI bus line

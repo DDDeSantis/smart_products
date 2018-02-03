@@ -1,5 +1,5 @@
 //=====================================================================
-// ---------------------------------------------------------- interrupt_module_mmap.c ------------------------------------------
+// -------------------------------nterrupt_module_mmap.c ------------------------
 //=====================================================================
 /*
 This file is used to make a character device for a interrupt driver. which can
@@ -7,15 +7,15 @@ This file is used to make a character device for a interrupt driver. which can
  In this particular this module can act as a background process to asychronously
  handle the permission/requests signals from a bus arbiter as interrupts, then sending
  acknowledgement signals back to the arbiter within the function
- 	 ----------------------------------------------------------------------------------------------------------------
+ 	 -------------------------------------------------------
  	static  irqreturn_t irq_handler(int irq, void *dev_id)
- 	 ----------------------------------------------------------------------------------------------------------------
+ 	 -------------------------------------------------------
  This function will handle the inital interrupt, send acknowledgements signals,
  and schedule a worker function to be queued in the workerqueue.
  The function that then handles the bottom half of the ISR is 
-	 ----------------------------------------------------------------------------------------------------------------
+	 ------------------------------------------------------
  	static void user_callhelper(struct work_struct *work)
- 	 ----------------------------------------------------------------------------------------------------------------
+ 	 ------------------------------------------------------
  which retrieves the memeory mapped data structure from userspace, encodes its 
  contents single string, and passes it into an auxillary application in userspace that
  can perform more advanced operations and transmit it to other devices. 
@@ -50,7 +50,7 @@ This file is used to make a character device for a interrupt driver. which can
 #include <asm/io.h>  
   
 //========================================================
-// ---------------------------------MODULE INFO-----------------------------------------------------
+// --------------------------MODULE INFO--------------------------
 //========================================================
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Dylan DeSantis");
@@ -59,7 +59,7 @@ MODULE_VERSION("0.1");
 //========================================================
 
 //========================================================
-// ---------------------------GLOBAL CONSTS/VARS---------------------------------------------
+// --------------GLOBAL CONSTS/VARS-----------------------
 //========================================================
 #define WQ_NAME "IRQ_queue" // Name for the workqueue
 static char *envp[ ] = {
@@ -77,7 +77,7 @@ static int irq_trig = 1;//		Interrupt index in IVT
 
 
 //========================================================
-// ---------------------------MODULE INPUT PARAM--------------------------------------------
+// -----------MODULE INPUT PARAM-----------------
 //========================================================
 static int ack_pnum ; //	GPIO Pin to transmit requests and acknowledgements
 static int trig_pnum; //	GPIO Pin to recieve external interrupts
@@ -91,7 +91,7 @@ module_param(buff_size, int, 0);
 //=========================================================
 
 //========================================================
-// -----------------CHAR DEV DECLARE/ GLOABL VARS-------------------------------
+// ----------CHAR DEV DECLARE/ GLOABL VARS-----------
 //========================================================
 /* character device structures */  
 static dev_t mmap_dev;  
@@ -119,7 +119,7 @@ static int *kmalloc_area;
 static void *kmalloc_ptr;    
 //========================================================
 //========================================================
-// --------------------------------MMAP DEFINITIONS--------------------------------------------
+// ---------------MMAP DEFINITIONS----------------
 //========================================================
 /* character device open method */  
 static int mmap_open(struct inode *inode, struct file *filp)  
@@ -194,7 +194,7 @@ static int mmap_mmap(struct file *filp, struct vm_area_struct *vma)
         return -EIO;  
 }  
 //========================================================
-// ---------------------------------WORKQUEUE------------------------------------------------------
+// ----------------WORKQUEUE-------------------
 //========================================================
 //This is how we register a bottom half handler
 struct irq_work_struct {
@@ -240,12 +240,12 @@ static void user_callhelper(struct work_struct *work)
 //========================================================
 
 //========================================================
-// -----------------------------INTERRUPT  FUNC--------------------------------------------------
+// ---------INTERRUPT  FUNC-----------------
 //========================================================
 //	Interrupt Service Routine (ISR)
 static  irqreturn_t irq_handler(int irq, void *dev_id)
 {
-	// -----send acknowledgement -------
+	// -send acknowledgement --
 	//===========================
 	// flips the state of the acknowledgement line
 	// ***this needs more logic if to be used as an actual acknowledgement***
@@ -394,7 +394,7 @@ static void __exit irq_exit_man(void)
 //=======================================================
 
 //========================================================
-// --------------------REGISTER INIT/EXIT FUNC---------------------------------------------
+// ---------REGISTER INIT/EXIT FUNC---------
 //========================================================
  //functions to call when we insert and remove the module into kernel space
 module_init(irq_init_man);// inserted  with ~ insmod 
