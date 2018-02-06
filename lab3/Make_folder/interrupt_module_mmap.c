@@ -219,7 +219,7 @@ static void user_callhelper(struct work_struct *work)
 	char *mess;
 	mess = "x"; // String message which we encode our packets into
 	const char delim[] = "x"; //This is the deliminator to seperate our packets
-	for( i= 0; i <temp_work->b_size; i++)
+	for( i= 1; i <temp_work->b_size+1; i++)
 	{
 		snprintf(cpy_buffer, sizeof(kmalloc_area[i]), "%u", kmalloc_area[i]);
 		mess=strncat(mess, cpy_buffer,sizeof(kmalloc_area[i]));
@@ -227,6 +227,7 @@ static void user_callhelper(struct work_struct *work)
 		printk("element  %d , %X \n", i, (int)kmalloc_area[i]);
 		printk("message %d, %s \n", i, mess);
 		kmalloc_area[i] = 0;
+		kmalloc_area[0] = kmalloc_area[0] -1;
 	}
 	//	Parameters passed into the userspace application
 	char *argv[ ] = {exec_path, mess, NULL};			

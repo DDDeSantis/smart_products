@@ -103,11 +103,13 @@ int main()
 // --------------------MAIN  LOOP-----------------------
 //========================================================
 	std::cout<<" BEGIN PROGRAM"<<std::endl;
-	int packet_count = 0;
+	//The first element keep tracks of the number of current packets
+	*(( volatile unsigned int *)ptrx) = 0;	
+	int packet_count = 1;
 	while(Sess_main.digitalRead(break_pin))
 	{
 		//Simulate a pulse into the interrupt pin
-		if(i==100) {
+		if(i==800) {
 			std::cout<<"Simulate Trigger Signal: Rising Edge "<<std::endl;
 			Sess_main.digitalWrite(pin_set_trig, HIGH);
 		}
@@ -117,13 +119,15 @@ int main()
 		}
 		else if(i >=80 && packet_count<33)
 		{
-			if(packet_count ==0){
-			*(( volatile unsigned int *)ptrx) = RED | SIZE_SM;	
+			if(packet_count ==1){
+			*(( volatile unsigned int *)ptrx+packet_count) = RED | SIZE_SM;	
 			printf("Buffer: %X, reading \n",*((unsigned int *)ptrx));
+			*(( volatile unsigned int *)ptrx) = 1;	
 			packet_count++;
 			}
 			else{
 			*(( volatile unsigned int *)ptrx+packet_count) = 0x00;	
+			*(( volatile unsigned int *)ptrx) = packet_count;	
 			packet_count++;
 			}
 			
