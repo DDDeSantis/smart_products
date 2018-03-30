@@ -28,8 +28,6 @@ int DCMotor::setupDCMotor(PLATE_ADDR addr, DC_MOTOR mtr_in, DC_MOTOR_DIR mtr_dir
 	MotorPlate::configDC( addr, mtr_in,  mtr_dir, start_speed, accel);
 	MotorPlate::GPIO::pinMode(A_Encoder_Pin, INPUT);
 	MotorPlate::GPIO::pinMode(B_Encoder_Pin, INPUT);
-	this->stateA = MotorPlate::GPIO::digitalRead(A_Encoder_Pin );
-	this->stateB = MotorPlate::GPIO::digitalRead(B_Encoder_Pin );
 	pFile = fopen(file_name.c_str(),"w");
 	fprintf(pFile,"Time (s), Ref (deg/s), Ctrl (deg/s), Error (deg/s), Output (deg/s) \n");
 	return 0;
@@ -39,6 +37,7 @@ int DCMotor::setupController(float Kp, float Ki, float Kd, float Ts)
 	this->K1= Kp + Ki*Ts/2.0 + Kd/Ts;
 	this->K2 = Ki*Ts/2-Kp-2*Kd/Ts;
 	this->K3 = Kd/Ts;
+	this->Ts = Ts;
 	return 0;
 }
 int DCMotor::closeLogger()
@@ -49,7 +48,9 @@ int DCMotor::closeLogger()
 
 float DCMotor::time()
 {
-	float duration = ( clock() - this->start_time ) / (float) CLOCKS_PER_SEC;
+	time_point time_now = high_resolution_clock::now();
+	duration<float, std::micro> time_span = this->start_time - time_now;
+	float duration =(1.0/1000000.0)* ((float)(time_span.count()));
 	return duration;
 }
 
@@ -62,14 +63,14 @@ int DCMotor::sampleHold(int delay, timeScale ts)
 int DCMotor::startDCMotor()
 {
 	MotorPlate::startDC(this->pa, this->mtr);
-	this->start_time = std::clock();
+	this->start_time = high_resolution_clock::now();
 	return 0;
 }
 
 int DCMotor::stopDCMotor()
 {
 	MotorPlate::stopDC(this->pa, this->mtr);
-	this->end_time = std::clock();
+	this->end_time = high_resolution_clock::now();
 	return 0;
 }
 
