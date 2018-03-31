@@ -69,19 +69,20 @@ public:
 	int pin_enA;
 	int pin_enB;
 	float speed_k = 0;
-	time_point  start_time;
-	time_point  end_time;
+	std::chrono::steady_clock::time_point  start_time;
+	std::chrono::steady_clock::time_point  end_time;
+	float timeout = 0.1;
 	string file_name;
 	FILE *pFile;
 	
 	//	Digital Control Members
 	float Ts; // in seconds
 	float K1, K2, K3;
-	float error_sig_km0 = 0; // error for the k-0 sample
-	float error_sig_km1 = 0;// error for the k-1 sample
-	float error_sig_km2 = 0;// error for the k-2 sample
-	float ctrl_sig_km0 = 0;// control for the k-0 sample
-	float ctrl_sig_km1 = 0;// control for the k-1 sample
+	float error_sig_km0 = 0.0; // error for the k-0 sample
+	float error_sig_km1 = 0.0;// error for the k-1 sample
+	float error_sig_km2 = 0.0;// error for the k-2 sample
+	float ctrl_sig_km0 = 0.0;// control for the k-0 sample
+	float ctrl_sig_km1 = 0.0;// control for the k-1 sample
 	
 	
 	/****************************************************************************************************
