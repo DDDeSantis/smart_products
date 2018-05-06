@@ -2,6 +2,7 @@
 This repository will contain the downloadable content for a handful of the labs for the Embedded Smart Products Course.
 
 The topic of the labs in this repository are:
+
 	- Lab 2: Embedded IO programming on the raspberry pi (GPIO, SPI, I2C)
 	- Lab 3: Kernel programming for interrupts on raspberry pi
 	- Lab 4: Robotic programming with UART communication and the Dobot Magician
